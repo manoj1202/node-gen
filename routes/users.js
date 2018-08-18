@@ -32,11 +32,19 @@ router.post('/register', upload.single("profileImage"), function(req, res, next)
   }
   // Form validation
   req.checkBody("name", 'Name field is required').notEmpty();
+  req.checkBody("email", 'Email field is required').notEmpty();
+  req.checkBody("email", 'Email  is not valid').isEmail();
+  req.checkBody("username", 'username field is required').notEmpty();
+  req.checkBody("password", 'password field is required').notEmpty();
+  req.checkBody("password2", 'password do not match ').equals(req.body.password);
 
   //Check Errors
-  var erors = req.asyncValidationErrors();
+  var errors = req.asyncValidationErrors();
   if(errors){
     console.log("errors")
+    res.render('register', {
+      errors : errors
+    })
   }else {
     console.log('No Errors')
   }
