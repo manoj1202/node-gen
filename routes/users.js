@@ -33,6 +33,14 @@ router.post('/login',
       if(!user){
         return done(null,false,{message : "Unknown User"})
       }
+      User.comparePassword(password,user.password,function(err, isMatch){
+        if(err) return done(err)
+        if(isMatch){
+          return done(null,user);
+        }else {
+          return done(null,false,{message : "Invalid Password"});
+        }
+      })
     })
   }))
 
