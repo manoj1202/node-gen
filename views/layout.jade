@@ -17,11 +17,13 @@ html(lang='en')
           ul.nav.navbar-nav
             li(class=(title=='Members' ? 'active' : ''))
               a(href='/') Members
-            li(class=(title=='Register' ? 'active' : ''))
+            if !user
+             li(class=(title=='Register' ? 'active' : ''))
               a(href='/users/register') Register
-            li(class=(title=='Login' ? 'active' : ''))
+             li(class=(title=='Login' ? 'active' : ''))
               a(href='/users/login') Login
           ul.nav.navbar-nav.navbar-right
+           if user
             li
               a(href='/users/logout') Logout    
     .container
