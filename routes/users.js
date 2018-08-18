@@ -3,6 +3,8 @@ var router = express.Router();
 var multer = require("multer");
 var upload = multer({dest: "./uploads"});
 
+var User = require('../model/user');
+
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   res.send('respond with a resource');
@@ -28,7 +30,7 @@ router.post('/register', upload.single("profileImage"), function(req, res, next)
     var profileimage = req.file.filename;
   }else {
     console.log("No File Uploaded...")
-    var profileImage = 'noimage.jpeg';
+    var profileimage = 'noimage.jpeg';
   }
   // Form validation
   req.checkBody("name", 'Name field is required').notEmpty();
@@ -46,7 +48,20 @@ router.post('/register', upload.single("profileImage"), function(req, res, next)
       errors : errors
     })
   }else {
-    console.log('No Errors')
+    var newUser = new User({
+      name:name,
+      email:email,
+      username: username,
+      password: password,
+      profileimage: profileimage
+    })
+    User.createUser(newUser, function(err, user){
+      if(err) throw err
+      console.log(user)
+    })
+    req.flash('succes', 'you are now registered and can login')
+    res.location('/');
+    res.redirect('/')
   }
 });
 
